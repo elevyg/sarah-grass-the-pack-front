@@ -7,8 +7,10 @@
  * need to use are documented accordingly near the end.
  */
 import { initTRPC } from "@trpc/server";
+import axios from "axios";
 import superjson from "superjson";
 import { ZodError } from "zod";
+import { env } from "~/env";
 
 /**
  * 1. CONTEXT
@@ -22,8 +24,16 @@ import { ZodError } from "zod";
  *
  * @see https://trpc.io/docs/server/context
  */
+
+const strapi = axios.create({
+  baseURL: `${env.STRAPI_URL}/api/`,
+  timeout: 1000,
+  headers: { Authorization: `Bearer ${env.STRAPI_TOKEN}` },
+});
+
 export const createTRPCContext = async (opts: { headers: Headers }) => {
   return {
+    strapi,
     ...opts,
   };
 };

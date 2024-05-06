@@ -1,5 +1,9 @@
 import { postRouter } from "~/server/api/routers/post";
-import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
+import {
+  createCallerFactory,
+  createTRPCRouter,
+  publicProcedure,
+} from "~/server/api/trpc";
 
 /**
  * This is the primary router for your server.
@@ -8,6 +12,10 @@ import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
  */
 export const appRouter = createTRPCRouter({
   post: postRouter,
+  getLanding: publicProcedure.query(async ({ ctx }) => {
+    const res = await ctx.strapi.get("landing-page");
+    return res;
+  }),
 });
 
 // export type definition of API
